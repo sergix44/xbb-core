@@ -1,0 +1,31 @@
+{
+  "_vendor-BV0mtPOj.css": {
+    "file": "assets/vendor-BV0mtPOj.css",
+    "src": "_vendor-BV0mtPOj.css"
+  },
+  "_vendor-C7mPGHaX.js": {
+    "file": "assets/vendor-C7mPGHaX.js",
+    "name": "vendor",
+    "css": [
+      "assets/vendor-BV0mtPOj.css"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BfAP3n0-.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Cx_SmQ0n.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-C7mPGHaX.js"
+    ]
+  }
+}
