@@ -11,33 +11,47 @@
                     'description' => 'Free and open-source screen capture, file sharing, and productivity tool for Windows.',
                     'action' => 'Download config',
                     'route' => route('integrations.sharex'),
+                    'link' => 'https://getsharex.com/',
+                ],
+                [
+                    'name' => 'Xerahs',
+                    'icon' => 'o-camera',
+                    'platforms' => ['Windows', 'macOS', 'Linux'],
+                    'description' => 'ShareX reimagined with modern UI, built from the ground up for cross-platform performance.',
+                    'action' => 'Download config',
+                    'route' => route('integrations.xerahs'),
+                    'link' => 'https://xerahs.com',
                 ],
                 [
                     'name' => 'ScreenCloud',
                     'icon' => 'o-cloud-arrow-up',
                     'platforms' => ['Windows', 'macOS', 'Linux'],
                     'description' => 'Open-source screen capture and file sharing app available across every desktop platform.',
-                    'action' => 'Get extension',
+                    'action' => 'Copy install link',
+                    'link' => 'https://screencloud.net',
+                    'copy' => \Illuminate\Support\Facades\URL::signedRoute('integrations.screencloud', ['user' => auth()->id()]),
+                ],
+                [
+                    'name' => 'Spectacle',
+                    'icon' => 'si.kde',
+                    'platforms' => ['Linux', 'KDE'],
+                    'description' => "KDE's built-in screenshot utility. An upload script with native KDE desktop integration for one-click sharing.",
+                    'action' => 'Download script',
+                    'link' => 'https://apps.kde.org/spectacle/',
                 ],
             ],
         ],
         [
-            'label' => 'Desktop scripts',
-            'hint' => 'Drop-in scripts with native desktop integration.',
+            'label' => 'CLI scripts',
+            'hint' => 'Drop-in shell scripts you run straight from the terminal.',
             'items' => [
                 [
-                    'name' => 'Linux Desktop',
-                    'icon' => 'si.linux',
-                    'platforms' => ['Linux'],
-                    'description' => 'A lightweight upload script that hooks straight into your desktop environment.',
+                    'name' => 'CLI',
+                    'icon' => 'o-command-line',
+                    'platforms' => ['Linux', 'macOS'],
+                    'description' => 'A portable shell uploader for your terminal: upload files or piped text, with clipboard, screenshot, and scripting-friendly output.',
                     'action' => 'Download script',
-                ],
-                [
-                    'name' => 'KDE',
-                    'icon' => 'si.kde',
-                    'platforms' => ['Linux', 'KDE'],
-                    'description' => 'Upload script with native KDE desktop integration for one-click sharing.',
-                    'action' => 'Download script',
+                    'route' => route('integrations.cli'),
                 ],
             ],
         ],
@@ -81,6 +95,13 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    @if(! empty($integration['link']))
+                                        <a href="{{ $integration['link'] }}" target="_blank" rel="noopener noreferrer"
+                                           class="ml-auto shrink-0 text-base-content/40 transition-colors hover:text-primary"
+                                           title="Visit {{ $integration['name'] }} website">
+                                            <x-icon name="o-arrow-top-right-on-square" class="size-4"/>
+                                        </a>
+                                    @endif
                                 </div>
 
                                 <p class="grow text-sm text-base-content/70">
@@ -88,7 +109,15 @@
                                 </p>
 
                                 <div class="card-actions">
-                                    @if(! empty($integration['route']))
+                                    @if(! empty($integration['copy']))
+                                        <div class="w-full" x-data="{ copied: false, link: @js($integration['copy']) }">
+                                            <x-button :label="$integration['action']" icon="o-clipboard-document" class="btn-primary btn-block"
+                                                      x-on:click="navigator.clipboard.writeText(link); copied = true; setTimeout(() => copied = false, 2000)"/>
+                                            <p class="mt-1.5 text-center text-xs text-success" x-show="copied" x-cloak>
+                                                Link copied — paste it into ScreenCloud
+                                            </p>
+                                        </div>
+                                    @elseif(! empty($integration['route']))
                                         <x-button :label="$integration['action']" icon="o-arrow-down-tray" class="btn-primary btn-block" :link="$integration['route']" no-wire-navigate/>
                                     @else
                                         <x-button :label="$integration['action']" icon="o-arrow-down-tray" class="btn-primary btn-block" disabled/>

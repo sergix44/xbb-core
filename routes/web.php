@@ -32,8 +32,10 @@ Route::group(['middleware' => ['auth', 'verified']], static function () {
     Route::livewire('dashboard', Dashboard::class)->name('dashboard');
     Route::livewire('integrations', Integrations::class)->name('integrations');
     Route::get('integrations/sharex', [IntegrationController::class, 'shareX'])->name('integrations.sharex');
+    Route::get('integrations/xerahs', [IntegrationController::class, 'xerahs'])->name('integrations.xerahs');
+    Route::get('integrations/cli', [IntegrationController::class, 'cli'])->name('integrations.cli');
     Route::livewire('settings/{tab?}', Settings::class)->name('admin.settings')
-        ->whereIn('tab', ['general', 'users', 'statistics'])
+        ->whereIn('tab', ['general', 'users', 'statistics', 'updates'])
         ->can('administrate');
     Route::get('profile/export/download', [ExportController::class, 'download'])->name('user.profile.export');
     Route::livewire('profile/{tab?}', Profile::class)->name('user.profile')
@@ -41,6 +43,9 @@ Route::group(['middleware' => ['auth', 'verified']], static function () {
 });
 
 Route::get('delete/{resource:code}', [ResourceController::class, 'delete'])->name('resource.delete')->middleware('signed');
+
+// Public signed URL: ScreenCloud installs the uploader plugin directly from the pasted link.
+Route::get('integrations/screencloud/{user}', [IntegrationController::class, 'screenCloud'])->name('integrations.screencloud')->middleware('signed');
 
 // Registered before the single-segment preview route below so it is not captured as a resource code.
 Route::get('oembed', [OembedController::class, 'show'])->name('oembed');
